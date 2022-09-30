@@ -1,0 +1,2 @@
+CREATE or replace TABLE movie (id bigint auto_increment primary key, title VARCHAR(50), description VARCHAR(100), running_time int, ticket_price numeric(10, 2), speical_code int)
+create or replace table showing(sequence int, start_date date, start_time time, id bigint, foreign key(id) references movie(id) )
