@@ -1,5 +1,6 @@
 package com.jpmc.theater.movietheaterapi.repository;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import com.jpmc.theater.movietheaterapi.entity.Movie;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class MovieRepository {
 
     @Autowired
@@ -39,18 +43,18 @@ public class MovieRepository {
         return movies;
     }
     
-    public Movie findMovieById(int movieId) {
+    public Movie findMovieById(long movieId) {
+    	log.info("findMovieById: Finding movie details for id {}", movieId);
         List<Map<String, Object>> list =  template.queryForList("select title, description, running_time, ticket_price, special_code from movie where id = ?", movieId);
         List<Movie> movies = new ArrayList<>();
         for (Map<String, Object> m : list) {
-        	int id = (int) m.get("id");
         	String title = (String) m.get("title");
         	String description = (String) m.get("description");
         	int runningTime = (int) m.get("running_time");
         	Duration runningDuration = Duration.ofMinutes(runningTime);
-        	double ticketPrice = (int) m.get("ticket_price");
+        	double ticketPrice = ((BigDecimal) m.get("ticket_price")).doubleValue();
         	int specialCode = (int) m.get("special_code");
-        	Movie movie = new Movie(id, title, description, runningDuration, ticketPrice, specialCode);
+        	Movie movie = new Movie(movieId, title, description, runningDuration, ticketPrice, specialCode);
         	movies.add(movie);
 
         }
