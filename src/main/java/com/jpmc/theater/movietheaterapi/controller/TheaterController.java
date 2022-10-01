@@ -27,11 +27,6 @@ public class TheaterController {
 	TheaterService theaterService;
 
 	
-	@PostConstruct
-	public void buildSchedule() {
-		theaterService.buildShowSchedule();
-	}
-	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value="/shows")
 	public ShowingOut listShowings() {
 		return new ShowingOut(theaterService.getAllShows());
